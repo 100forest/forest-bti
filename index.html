@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="나를 닮은 나무를 찾고 숲에서의 취미·봉사·일자리 숲길을 알려 드리는 중장년 숲 유형검사. 백년숲사회적협동조합">
+<title>숲BTI 중장년편</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+/* Layout: 한 장짜리 숲 안내 카드 — 위는 검사(한 문항씩), 가운데 16그루 나무 도감, 아래 분야별 숲 일 찾기 */
+:root{
+  --bg:#EDF1EA; --paper:#FAFBF7; --ink:#1D2A22; --muted:#56655B; --line:#C9D3C6;
+  --pine:#2F5D3A; --pine-soft:#DCE8D8; --bark:#7A4E2E; --bark-soft:#F0E4D8;
+  --fp:#3E7A4A; --fn:#2A5A44; --cp:#4F7686; --cn:#9A5B2E;
+  --display:"Gowun Batang","Nanum Myeongjo",serif;
+  --body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141C17; --paper:#1B251F; --ink:#E6EDE5; --muted:#A3B2A6; --line:#33433A;
+  --pine:#8CC596; --pine-soft:#24382A; --bark:#E0A97C; --bark-soft:#3A2A1E;
+  --fp:#8CC596; --fn:#79B9A0; --cp:#9CC3D3; --cn:#E0A97C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141C17; --paper:#1B251F; --ink:#E6EDE5; --muted:#A3B2A6; --line:#33433A;
+  --pine:#8CC596; --pine-soft:#24382A; --bark:#E0A97C; --bark-soft:#3A2A1E;
+  --fp:#8CC596; --fn:#79B9A0; --cp:#9CC3D3; --cn:#E0A97C; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.3}
+p{margin:0}
+.eyebrow{font-size:14px;letter-spacing:.08em;color:var(--pine);font-weight:700}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--bark);outline-offset:3px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;gap:20px}
+.hero h1{font-size:clamp(30px,7vw,42px)}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hero-top h1{min-width:0;word-break:keep-all}
+.mascot{flex:none;width:clamp(96px,26vw,140px);height:auto;overflow:visible}
+.m-body{transform-origin:60px 136px;animation:mSway 3.6s ease-in-out infinite}
+.m-q{font-family:var(--display);font-weight:700;font-size:54px;transform-box:fill-box;transform-origin:center;animation:mQ 2.4s ease-in-out infinite}
+@keyframes mSway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes mQ{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-3px) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.m-body,.m-q{animation:none}}
+.hero .lead{color:var(--muted);font-size:18px}
+.axes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.axis{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.axis b{font-size:15px;color:var(--muted);font-weight:500}
+.axis span{font-size:17px}
+.primary{background:var(--pine);color:var(--paper);border:0;border-radius:14px;padding:18px 22px;font-size:20px;font-weight:700}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:14px 18px;font-size:17px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+
+.progress{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{flex:1;height:8px;background:var(--pine-soft);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pine);border-radius:8px;transition:width .25s}
+.q{font-size:clamp(23px,5.4vw,28px)}
+.choices{display:flex;flex-direction:column;gap:12px}
+.choice{text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:18px 20px;font-size:19px;color:var(--ink);display:flex;gap:14px;align-items:flex-start}
+.choice:hover{border-color:var(--pine)}
+.choice .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--pine-soft);color:var(--pine);display:grid;place-items:center;font-weight:700;font-size:16px}
+
+.res-head{display:flex;flex-direction:column;gap:8px}
+.fam{display:inline-flex;align-self:flex-start;font-size:15px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--pine-soft);color:var(--famc)}
+.res-tree{font-size:clamp(40px,10vw,56px);color:var(--famc);line-height:1.15}
+.res-role{font-size:20px;font-weight:700}
+.treewhy{font-family:var(--display);font-size:18px;color:var(--muted);border-left:3px solid var(--famc);padding-left:14px}
+.code{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.code div{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;display:flex;flex-direction:column}
+.code b{font-family:var(--display);font-size:26px;color:var(--famc)}
+.code small{font-size:14px;color:var(--muted)}
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec h3{font-size:21px}
+.jobs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.jobs li{border-left:4px solid var(--famc,var(--pine));background:var(--bg);border-radius:0 12px 12px 0;padding:12px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.jobs strong{font-size:18px}
+.jobs p{font-size:16px;color:var(--muted)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.field{font-size:13px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 8px}
+.gov{font-size:13px;color:var(--pine);font-weight:700;background:var(--pine-soft);border-radius:6px;padding:0 8px}
+.prep{align-self:flex-start;font-size:14px;background:var(--bark-soft);color:var(--bark);border-radius:8px;padding:2px 10px;font-weight:500}
+.fits{display:flex;gap:6px;flex-wrap:wrap}
+.fits button{font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:2px 10px 2px 4px;display:inline-flex;align-items:center;gap:4px}
+.fits button:hover{border-color:var(--pine)}
+.learn{font-size:15px;color:var(--ink)}
+.learn b{font-size:13px;color:var(--pine);margin-right:6px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.case{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.case h3{font-size:19px}
+.case p{font-size:16px;color:var(--muted)}
+.case .place{font-size:13px;font-weight:700;color:var(--bark)}
+.case .mark{font-size:14px;color:var(--ink)}
+.groupname{font-family:var(--display);font-size:20px;color:var(--pine)}
+@media (max-width:520px){.cards{grid-template-columns:1fr}}
+.banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-radius:16px;padding:16px 18px;background:linear-gradient(120deg,var(--pine),var(--fp),var(--pine));background-size:220% 100%;color:var(--paper);cursor:pointer;box-shadow:0 6px 18px -8px var(--pine);animation:bannerGlow 6s ease-in-out infinite,bannerNudge 4.5s ease-in-out 1.2s infinite;transition:transform .2s ease,box-shadow .2s ease}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);animation:bannerShine 3.6s ease-in-out .6s infinite;pointer-events:none}
+.banner:hover{transform:translateY(-2px);box-shadow:0 12px 24px -10px var(--pine)}
+.banner:active{transform:translateY(0) scale(.99)}
+.banner > *{position:relative;z-index:1}
+.banner-go{animation:arrowBob 1.6s ease-in-out infinite;box-shadow:0 0 0 0 rgba(255,255,255,.6)}
+.banner-go::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--paper);animation:ringPulse 1.8s ease-out infinite}
+.banner-tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--paper);margin-right:6px;vertical-align:1px;animation:dotBlink 1.4s ease-in-out infinite}
+@keyframes bannerShine{0%{transform:translateX(-120%)}55%,100%{transform:translateX(120%)}}
+@keyframes bannerGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes bannerNudge{0%,88%,100%{transform:translateY(0)}92%{transform:translateY(-3px)}96%{transform:translateY(1px)}}
+@keyframes arrowBob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
+@keyframes ringPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.7);opacity:0}}
+@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.banner,.banner::after,.banner-go,.banner-go::before,.banner-tag::before{animation:none}.banner::after{display:none}}
+.banner-tag{flex:none;font-size:13px;font-weight:700;border:1px solid currentColor;border-radius:999px;padding:2px 10px}
+.banner-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.banner-text b{font-family:var(--display);font-size:19px;line-height:1.35}
+.banner-text small{font-size:14px;opacity:.9}
+.banner-go{position:relative;flex:none;width:36px;height:36px;border-radius:50%;background:var(--paper);color:var(--pine);display:grid;place-items:center;font-size:20px;font-weight:700}
+@media (max-width:480px){.banner-tag{display:none}}
+#signup{scroll-margin-top:16px}
+.signup{background:var(--paper)!important;border:2px solid var(--pine);border-radius:16px;padding:20px 18px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.su-head{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}
+.su-head h3{font-size:21px}
+.su-head p,.hint{font-size:15px;color:var(--muted)}
+.signup label{font-size:16px;font-weight:700}
+.signup label em,.agree em{font-style:normal;font-size:13px;color:var(--bark);margin-left:4px}
+.signup input:not([type=checkbox]),.signup select{font:inherit;font-size:18px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);width:100%}
+.signup input:focus,.signup select:focus{outline:3px solid var(--bark);outline-offset:1px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.consent-box{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper);font-size:15px}
+.consent-box summary{cursor:pointer;font-weight:700}
+.consent-box dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:10px 0 0}
+.consent-box dt{color:var(--muted)}
+.consent-box dd{margin:0}
+.agree{display:flex;gap:10px;align-items:flex-start;font-weight:500!important;cursor:pointer}
+.agree input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:var(--pine)}
+.su-msg{font-size:15px;min-height:1.3em}
+.su-msg.err{color:var(--bark)}
+.su-done{display:flex;flex-direction:column;gap:6px}
+.su-done h3{font-size:22px;color:var(--pine)}
+.jump{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;text-align:left;font-size:19px;line-height:1.5;color:var(--ink);background:var(--pine-soft);border:2px dashed var(--pine);border-radius:14px;padding:16px 18px}
+.jump b{color:var(--pine);font-size:22px;font-family:var(--display)}
+.jump i{font-style:normal;flex:none;width:42px;height:42px;font-size:22px;border-radius:50%;background:var(--pine);color:var(--paper);display:grid;place-items:center;font-weight:700;animation:arrowBob 1.6s ease-in-out infinite}
+.jump:hover{border-style:solid}
+.below{text-align:center;font-size:19px;font-weight:700;color:var(--pine);margin-top:-2px}
+#route-sec{scroll-margin-top:16px}
+@media (prefers-reduced-motion:reduce){.jump i{animation:none}}
+.route-lead{font-size:16px;color:var(--muted)}
+.route{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
+.step{display:flex;flex-direction:column;gap:10px;position:relative}
+.step-h{display:flex;gap:12px;align-items:flex-start}
+.step-h .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--famc,var(--pine));color:var(--paper);display:grid;place-items:center;font-weight:700;font-size:17px}
+.step-h b{display:block;font-family:var(--display);font-size:20px}
+.step-h span{font-size:15px;color:var(--muted)}
+.stg{font-size:13px;font-weight:700;border-radius:6px;padding:0 8px}
+.stg-hobby{background:var(--pine-soft);color:var(--pine)}
+.stg-volunteer{background:var(--bark-soft);color:var(--bark)}
+.stg-job{background:var(--ink);color:var(--paper)}
+.first{background:var(--pine-soft);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.first b{font-size:15px;color:var(--pine)}
+.toast{font-size:15px;color:var(--pine);min-height:1.4em}
+
+.block{display:flex;flex-direction:column;gap:18px}
+.block > div > h2{font-size:26px}
+.block .sub{color:var(--muted);font-size:16px}
+#families{display:flex;flex-direction:column;gap:22px}
+.family{display:flex;flex-direction:column;gap:10px}
+.family h3{font-size:19px;color:var(--famc);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.family h3 small{font-family:var(--body);font-size:15px;color:var(--muted);font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--ink);display:flex;gap:12px;align-items:flex-start;min-width:0}
+.tile .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tile:hover{border-color:var(--famc)}
+.tile code{font-family:var(--body);font-size:13px;letter-spacing:.06em;color:var(--famc);font-weight:700}
+.tile b{font-family:var(--display);font-size:22px;color:var(--famc)}
+.tile em{font-style:normal;font-weight:700;font-size:15px}
+.tile .ln{font-size:15px;color:var(--muted);line-height:1.5}
+.ico{flex:none;width:56px;height:56px;border-radius:50%;background:var(--bg);display:grid;place-items:center}
+.ico svg{width:46px;height:46px;display:block}
+.ico.big{width:104px;height:104px}
+.ico.big svg{width:86px;height:86px}
+.ico.sm{width:22px;height:22px;background:none}
+.ico.sm svg{width:22px;height:22px}
+.res-title{display:flex;align-items:center;gap:16px}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:16px}
+.chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:var(--paper);font-weight:700}
+.chip small{font-size:13px;opacity:.75;margin-left:4px;font-variant-numeric:tabular-nums}
+#catalog .jobs li{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--pine)}
+
+.note{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:420px){.card{padding:22px 18px}.grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <button class="banner" id="banner" type="button">
+    <span class="banner-tag">소식 안내 받기</span>
+    <span class="banner-text"><b>숲 교육·봉사·일자리 소식을 받아 보세요</b><small>연락처만 남기시면 나에게 맞는 소식을 문자나 메일로 보내 드립니다.</small></span>
+    <span class="banner-go" aria-hidden="true">↓</span>
+  </button>
+  <section class="card hero" id="stage" aria-live="polite"></section>
+  <div id="news-home"></div>
+
+  <section class="block" aria-labelledby="g-title">
+    <div>
+      <p class="eyebrow">숲BTI 나무 도감</p>
+      <h2 id="g-title">숲에서 일하는 열여섯 그루</h2>
+    </div>
+    <div id="families"></div>
+  </section>
+
+  <section class="block" aria-labelledby="c-title">
+    <div>
+      <p class="eyebrow">분야별로 찾아보기</p>
+      <h2 id="c-title">숲에서 할 수 있는 일</h2>
+      <p class="sub">취미·봉사·일자리 단계와 분야로 골라 보세요. 교육·안내부터 정원, 목공·수리, 나무 돌봄, 문화·예술, 임산물까지. 나무 이름을 누르면 그 유형의 결과를 볼 수 있습니다.</p>
+    </div>
+    <div class="chips" id="stageChips" role="group" aria-label="단계 고르기"></div>
+    <div class="chips" id="fieldChips" role="group" aria-label="분야 고르기"></div>
+    <div id="catalog"></div>
+  </section>
+
+  <section class="block" aria-labelledby="b-title">
+    <div>
+      <p class="eyebrow">백년숲에서 함께할 일</p>
+      <h2 id="b-title">백년숲과 첫걸음 떼기</h2>
+      <p class="sub">자격을 따기 전에도 백년숲에서 숲 일을 직접 해 볼 수 있습니다. 어울리는 나무를 누르면 그 유형을 볼 수 있습니다.</p>
+    </div>
+    <div class="cards" id="baek"></div>
+  </section>
+
+  <section class="block" aria-labelledby="s-title">
+    <div>
+      <p class="eyebrow">먼저 걸어간 선배들</p>
+      <h2 id="s-title">숲에서 일을 만든 그루경영체</h2>
+      <p class="sub">그루경영체는 산림청 산림일자리발전소가 키우는 주민 공동체 사업입니다. 2018년부터 2025년까지 주민 3,680명이 참여해 317개 경영체가 창업했고, 누적 매출은 약 282억 원입니다. 동네 사람 몇이 모이면 시작할 수 있습니다.</p>
+    </div>
+    <div id="seniors" style="display:flex;flex-direction:column;gap:14px"></div>
+  </section>
+
+  <div class="note">
+    <p>일자리와 자격 정보는 산림청 「숲에서 일하는 100가지 방법」(2018), 정부24 산림서비스도우미 안내, 산림청 산림일자리 현황(2026), 도시농업관리사·산림레포츠지도사·국가유산수리기능자 관련 보도를 바탕으로 중장년에게 맞게 골랐습니다.</p>
+    <p>‘정부일자리’는 산림청 소속기관과 지자체가 공고를 내고 모집합니다. 온라인 신청은 안 되고 방문·우편·전화·이메일로 접수합니다. 산림서비스도우미 일급은 66,800원(정부24 안내 기준)이며 해마다 바뀔 수 있습니다.</p>
+    <p>교육 시간과 응시 요건은 바뀔 수 있으니 신청 전에 양성기관과 담당 기관에 꼭 확인하세요.</p>
+    <p>정부일자리 모집 공고는 울산시·구군 누리집과 남부지방산림청(울산 관할 국유림관리소)에서, 산림교육전문가·산림치유지도사 양성기관은 산림복지전문가 자격관리시스템(한국산림복지진흥원)에서 지역별로 찾을 수 있습니다. 그루경영체 문의는 산림청 산림안전보건일자리팀(042-481-1855)과 한국임업진흥원입니다.</p>
+    <p>백년숲사회적협동조합 · 052-911-1002 · official@forest100.org</p>
+  </div>
+</div>
+
+<script>
+const AX = {F:"숲·산 현장", C:"마을·도시 가까이", P:"사람과 함께", N:"나무·손작업", L:"앞장서 이끌기", S:"곁에서 받치기", W:"일·소득", V:"보람·건강"};
+const FAM = {
+  FP:{name:"숲길 갈래",desc:"숲에서 사람을 만나는 나무들",c:"var(--fp)"},
+  FN:{name:"숲속 갈래",desc:"숲을 직접 돌보는 나무들",c:"var(--fn)"},
+  CP:{name:"마을 갈래",desc:"마을에서 사람을 잇는 나무들",c:"var(--cp)"},
+  CN:{name:"뜰 갈래",desc:"가까운 곳에서 손으로 가꾸는 나무들",c:"var(--cn)"}
+};
+const FIELDS = {
+  edu:"교육·안내", garden:"정원·식물", wood:"목공·수리", tree:"나무 돌봄", forest:"숲 가꾸기·산불",
+  care:"쉼·치유", culture:"문화·예술", comm:"공동체·운영", record:"기록·조사", mtn:"임산물·산촌"
+};
+const Q = [
+  {a:"F",b:"C",q:"쉬는 날 아침, 더 끌리는 곳은?",A:"등산화 신고 가까운 산으로",B:"동네 공원이나 마당, 공방으로"},
+  {a:"P",b:"N",q:"지난 일터에서 가장 보람 있던 순간은?",A:"사람을 가르치고 도왔을 때",B:"내 손으로 고치고 완성했을 때"},
+  {a:"L",b:"S",q:"모임에서 나는 주로?",A:"앞에서 정리하고 이끈다",B:"필요한 것을 미리 챙긴다"},
+  {a:"W",b:"V",q:"숲 활동으로 가장 바라는 것은?",A:"꾸준한 수입, 새 직업",B:"건강, 보람, 좋은 사람들"},
+  {a:"F",b:"C",q:"하루 일로 더 좋은 쪽은?",A:"땀 흘리며 산길을 오르내리는 일",B:"가까운 곳에서 2~3시간 차분히 하는 일"},
+  {a:"P",b:"N",q:"숲에서 처음 보는 버섯을 발견하면?",A:"일행을 불러 함께 이야기한다",B:"쪼그려 앉아 혼자 자세히 살핀다"},
+  {a:"L",b:"S",q:"새로운 일을 맡게 되면?",A:"내가 계획을 짜고 사람을 모은다",B:"정해진 방법대로 꼼꼼히 해낸다"},
+  {a:"W",b:"V",q:"200시간 교육이 필요한 자격과정이 있다면?",A:"일로 이어진다면 해볼 만하다",B:"부담 없이 가볍게 시작하고 싶다"},
+  {a:"F",b:"C",q:"일하러 가는 길은?",A:"차로 30분 깊은 숲속도 괜찮다",B:"걷거나 버스로 닿는 가까운 곳이 좋다"},
+  {a:"P",b:"N",q:"하루 종일 말을 많이 하는 일은?",A:"즐겁다, 사람 만나는 게 힘이 난다",B:"조금 지친다, 조용한 일이 편하다"},
+  {a:"L",b:"S",q:"내 경력을 쓰고 싶은 방식은?",A:"팀장이나 강사처럼 앞에서",B:"믿고 맡기는 든든한 손으로"},
+  {a:"W",b:"V",q:"일주일 리듬으로 좋은 것은?",A:"주 3~5일, 정해진 날 일하기",B:"주 1~2회, 내가 원할 때 참여하기"}
+];
+
+// 숲 일 목록: [분야, 이름, 하는 일, 준비, 정부일자리 여부, 맞는 유형들]
+const JOBS = [
+ ["edu","숲해설가","자연휴양림·수목원·도시숲에서 숲과 나무, 사람의 이야기를 해설합니다.","양성교육 170시간 + 실습 30시간",0,["FPLW","FPLV"]],
+ ["edu","유아숲지도사","유아숲체험원에서 아이들의 숲놀이를 이끕니다.","양성교육 205시간 + 실습 30시간",0,["FPLW","FPSW","FPSV"]],
+ ["edu","숲길등산지도사","숲길 이용객이 안전하게 걷도록 안내합니다. 산림서비스도우미로도 뽑습니다.","양성교육 145시간 + 실습 30시간",1,["FPSW","FPLW"]],
+ ["edu","산림레포츠지도사","산악자전거, 오리엔티어링, 암벽, 산악마라톤 등 8개 종목의 숲 레포츠를 안전하게 이끕니다.","산림교육원 종목별 양성과정",0,["FPLW","FPSW"]],
+ ["edu","목재교육전문가","목재문화체험장·공방에서 나무와 목공을 가르칩니다.","산림청 지정 양성기관 과정 이수",0,["CNLW","CPLW"]],
+ ["edu","도시농업관리사","텃밭·도시농업 강사로 학교, 복지시설, 주말농장에서 가르칩니다.","전문과정 80시간 + 원예·조경 등 기능사 1종 이상",0,["CNLV","CPLW"]],
+ ["edu","명상숲코디네이터","학교 명상숲을 가꾸고 학생 숲 활동을 운영합니다.","산림·조경·식물 자격 또는 관련 경력 2년",1,["CPLW","CNLV"]],
+ ["edu","숲체험 보조강사","숲해설가·유아숲지도사 곁에서 프로그램 진행을 돕습니다.","현장 교육 후 참여",0,["FPSW","FPSV","FPLW"]],
+ ["edu","숲 산책 모임 리더","이웃과 정기적으로 숲길을 걷는 모임을 꾸립니다.","자격 없이 바로 시작",0,["FPLV","FPLW","FPSW","FPSV"]],
+ ["edu","숲해설 재능기부·세대 잇기","살아온 경험과 동네 이야기를 아이·청년과 숲길에서 나눕니다.","자격 없이 바로 시작",0,["FPLV","FPLW"]],
+ ["edu","나무심기·숲 행사 진행 봉사","식목일·숲 축제 같은 행사 날 순서를 이끌고 사람들을 안내합니다.","자격 없이 바로 시작",0,["FPLV","CPLV","CPLW"]],
+
+ ["garden","정원전문가","정원을 설계·조성·관리하고 정원을 해설합니다.","이론 100시간 + 실습 250시간",0,["CPLW","CNLW"]],
+ ["garden","시민정원사","지자체 과정을 마치고 공원·공동체정원을 가꿉니다.","지자체 시민정원사 과정 이수",0,["CNLV","CNSW"]],
+ ["garden","수목원코디네이터","수목원 전시원의 식물을 가꾸고 관람객을 돕습니다.","가드너 교육 수료·관련 자격·경력 중 하나",1,["CNSW","CPSW"]],
+ ["garden","도시녹지관리원","도시숲과 가로수에 물을 주고 풀을 베고 가지를 정리합니다.","만 55세 이상 · 지역 공고 확인",1,["CNSW"]],
+ ["garden","조경기능사 → 조경 현장","조경 공사·관리 현장에서 나무를 심고 가꿉니다.","국가기술자격 (필기·실기)",0,["CNSW"]],
+ ["garden","국가유산 조경공","궁궐·사찰·옛 정원의 나무와 조경을 손봅니다.","국가유산수리기능자 시험 (실기·면접)",0,["CNSW","CNLW"]],
+ ["garden","분재관리사 · 조경수조성관리사","분재와 조경수를 기르고 모양을 잡아 관리합니다.","민간자격 시험 (필기·실기)",0,["CNSV"]],
+ ["garden","공동체정원 모임장","이웃과 계절마다 심고 가꾸는 모임을 꾸립니다.","자격 없이 바로 시작",0,["CNLV"]],
+ ["garden","씨앗·모종 기르기와 나눔","숲에 심을 묘목과 마을에 나눌 모종을 씨앗부터 기릅니다.","자격 없이 바로 시작",0,["CNSV","CNLV","CNSW"]],
+
+ ["wood","목구조시공기술자","목조주택과 나무 구조물을 짓습니다.","양성기관 350~700시간",0,["CNLW","FNLW"]],
+ ["wood","국가유산수리기능자 (대목수)","한옥과 옛 목조 건축물을 고치고 되살립니다.","국가 전문자격 시험 (실기·면접)",0,["CNLW"]],
+ ["wood","목재등급평가사","제재목·집성재의 규격과 품질을 검사해 등급을 매깁니다.","목재 생산·품질 실무 경력 + 양성과정",0,["CNLW"]],
+ ["wood","숲 시설물 보수","숲길 데크, 벤치, 안내판, 계단을 고치고 다듬습니다.","현장 안전교육 후 참여",0,["FNSW","FNSV","CNSW"]],
+ ["wood","산불피해목·솎아 낸 나무 소품 공방","버려질 나무로 시계, 조명, 키링 같은 소품을 만듭니다.","자격 없이 바로 시작",0,["CNSV","CNLW"]],
+ ["wood","가구·생활목공 수리와 되살림","낡은 의자와 가구를 고쳐 필요한 이웃에게 나눕니다.","자격 없이 바로 시작",0,["CNSV"]],
+ ["wood","목공 체험 진행 봉사","아이·가족 목공 체험에서 연장 쓰는 법을 알려 줍니다.","간단한 안전교육",0,["CNLV","CNLW"]],
+
+ ["tree","나무의사","나무병원에서 아픈 나무를 진단하고 처방합니다.","양성교육 160시간 이상 + 자격시험 (학력·경력 요건)",0,["CNLW"]],
+ ["tree","수목치료기술자","나무의사의 처방에 따라 나무를 치료합니다.","교육 190시간 (강의 142 + 실습 48)",0,["CNLW"]],
+ ["tree","마을 나무 가지치기·돌봄 봉사","마을 길과 공원 나무의 죽은 가지를 살피고 정리합니다.","간단한 안전교육",0,["CNSV","FNSV","CNLW"]],
+ ["tree","보호수·노거수 지킴이","마을 큰 나무의 상태를 살피고 내력을 지켜 냅니다.","자격 없이 바로 시작",0,["FNLV","CPLV"]],
+
+ ["forest","산림기능사 → 작업반장","조림·숲가꾸기·벌채 현장에서 일하고 작업반을 이끕니다.","국가기술자격 (필기·실기)",0,["FNLW","FNSW"]],
+ ["forest","산림경영기술자 (기능2급)","숲가꾸기·조림 현장의 기술 인력으로 등록해 일합니다.","산림인력개발기관 6주 이상 교육",0,["FNLW","FNSW"]],
+ ["forest","숲생태관리인","숲의 생태를 살피고 가꾸는 현장 일을 맡습니다.","관련 경력자 또는 산림 전공",1,["FNLW","FNLV"]],
+ ["forest","산불전문예방진화대","산불 조심 기간에 감시하고 초기 진화를 맡습니다.","지역 공고 확인 · 체력 확인",1,["FNSW"]],
+ ["forest","산림병해충 예찰방제단","소나무재선충병 같은 병해충을 살피고 방제합니다.","지역 공고 확인",1,["FNSW","FNSV"]],
+ ["forest","마을숲 돌봄 모임 대표","뒷산 정비와 나무심기를 하는 정기 모임을 꾸립니다.","자격 없이 바로 시작",0,["FNLV"]],
+ ["forest","마을 산불예방 순찰","봄·가을 산불 조심 시기에 마을 순찰을 조직합니다.","지자체·산림조합과 연계",0,["FNLV"]],
+ ["forest","현장 노하우 전수","청년 숲일꾼에게 연장 쓰는 법과 안전 요령을 가르칩니다.","경험이 곧 자격",0,["FNLV","FNLW"]],
+ ["forest","나무심기·숲가꾸기 봉사","정해진 날 모여 심고, 덩굴을 걷고, 길을 정비합니다.","자격 없이 바로 시작",0,["FNSV","FPSV","FNLW","FNSW"]],
+
+ ["care","산림치유지도사 2급","치유의숲에서 몸과 마음을 돌보는 프로그램을 진행합니다.","숲해설가 등 자격 후 3년 경력 · 158시간",0,["FPLW"]],
+ ["care","산림휴양서비스매니저","휴양림 이용객을 맞고 예약·시설 이용을 돕습니다.","산림 관련 경력 또는 전공",1,["CPSW"]],
+ ["care","숲체험 동행 봉사","어르신·아이 참가자 곁에서 함께 걷고 챙깁니다.","자격 없이 바로 시작",0,["FPSV"]],
+ ["care","행사 쉼터 지기","물, 간식, 구급함을 챙기고 쉬는 자리를 지킵니다.","자격 없이 바로 시작",0,["FPSV","CPSV"]],
+ ["care","산림복지 행사 자원봉사","숲 축제·치유 프로그램의 안내와 정리를 돕습니다.","자격 없이 바로 시작",0,["FPSV"]],
+
+ ["comm","산림복지전문업 운영","숲교육·숲치유 프로그램을 기획하고 운영하는 법인에서 일합니다.","법인 등록 요건 확인",0,["CPLW"]],
+ ["comm","숲 사회적경제기업","협동조합·마을기업에서 숲 사업을 꾸리고 사람을 잇습니다.","경력 그대로 활용",0,["CPLW","CPLV"]],
+ ["comm","협동조합 조합원 활동","숲 협동조합의 운영과 의사결정에 참여합니다.","조합원 가입",0,["CPLV"]],
+ ["comm","지역숲 공론장 참여","우리 동네 숲을 어떻게 가꿀지 주민 의견을 모읍니다.","자격 없이 바로 시작",0,["CPLV","CPLW"]],
+ ["comm","목재문화체험장 운영 보조","체험 접수와 공방 안내를 맡습니다.","기관 채용 공고 확인",0,["CPSW"]],
+ ["comm","숲 프로그램 행정 보조","참가자 명단, 일정, 서류를 챙깁니다.","사무 경력 그대로 활용",0,["CPSW","CPSV"]],
+ ["comm","참여자 안부 연락","오랜만인 참여자에게 안부와 소식을 전합니다.","자격 없이 바로 시작",0,["CPSV"]],
+ ["comm","감사 인사·소식 전하기","행사 후 함께한 분들께 고마운 마음과 다음 소식을 전합니다.","자격 없이 바로 시작",0,["CPSV"]],
+ ["comm","행사 접수 봉사","행사 날 이름을 확인하고 자리를 안내합니다.","자격 없이 바로 시작",0,["CPSV"]],
+
+ ["record","생태 모니터링","정해진 길을 걸으며 나무·새·꽃의 변화를 기록합니다.","간단한 기록 교육",0,["FNSV"]],
+ ["record","숲 기록 정리","사진과 활동 기록, 표본을 정리해 남깁니다.","자격 없이 바로 시작",0,["CPSV"]],
+ ["record","마을 숲 이야기 채록","어르신들께 마을 숲의 옛이야기를 듣고 기록합니다.","자격 없이 바로 시작",0,["CPSV","FNLV"]],
+
+ ["mtn","임업인 (산약초·표고·밤 재배)","임업후계자로 등록해 산에서 임산물을 기르고 소득을 만듭니다.","임업후계자 교육 이수 등 요건",0,["FNLW","FNSW"]],
+ ["mtn","산촌 체험마을·숲 민박 운영","숲마을에서 체험 프로그램과 숙박을 꾸립니다.","마을·법인과 함께 시작",0,["FPLW","CPLW"]],
+ ["mtn","임산물 가공·장터 판매","도토리묵, 산나물, 잼 같은 숲 먹거리를 만들어 팝니다.","식품 위생 교육 등 확인",0,["CNSV","CPSW"]],
+
+ ["forest","숲길 걷기·등산 모임","주말마다 가까운 산을 함께 오르며 숲길과 계절을 몸으로 익힙니다.","자격 없이 바로 시작",0,["FNLW","FNSW","FPSW","FPSV"]],
+ ["edu","나무 이름 익히기 공부 모임","동네 공원과 숲길에서 나무와 풀 이름을 하나씩 익히는 모임입니다.","자격 없이 바로 시작",0,["FPLW","CPSW","CNSW","CPLW"]],
+ ["culture","숲 축제·문화행사 기획","숲속 음악회, 정원 축제, 숲 영화 상영회처럼 숲에서 열리는 문화 행사를 기획하고 운영합니다.","기획·행사 경력 그대로 활용",0,["CPLW","CPLV"]],
+ ["culture","문화예술교육사","숲을 주제로 미술·음악·연극 같은 문화예술 수업을 설계하고 가르칩니다.","2급: 관련 학위 또는 학점은행제로 지정 과목 이수",0,["CPLW","FPLW"]],
+ ["culture","문화관광해설사","울산의 문화유산과 숲을 함께 해설합니다. 숲해설과 같이 하는 경우도 많습니다.","지자체 양성교육 이수 후 선발",0,["FPLW","CPSW"]],
+ ["culture","태화강 국가정원 해설","국가정원을 찾은 방문객에게 정원과 식물 이야기를 들려줍니다.","울산시 해설사 전문교육 이수",0,["CNLV","CPSW"]],
+ ["culture","숲 그림(보태니컬 아트) 강사·작가","나뭇잎과 꽃을 세밀하게 그려 전시하고, 그리는 법을 가르칩니다.","강좌 수강 · 민간자격은 선택",0,["CNSV","CNLV"]],
+ ["culture","숲 사진·영상 기록","숲 활동과 계절의 변화를 사진과 영상으로 남기고 알립니다.","자격 없이 바로 시작",0,["CNSV","CPSV","FNSV","FPSW","CPSW"]],
+ ["culture","숲 이야기 구연·인형극","아이들에게 숲 이야기를 들려주고 인형극으로 숲을 알립니다.","구연동화·인형극 강좌(선택)",0,["FPLV","FPSV"]],
+ ["culture","숲속 작은 음악회·낭독회","악기 연주, 시 낭송, 합창을 숲에서 이웃과 나눕니다.","자격 없이 바로 시작",0,["FPLV","CPLV","FPSV","CPLW"]],
+ ["culture","나무 업사이클 작품 전시","산불피해목과 솞아 낸 나무로 작품을 만들어 전시합니다.","자격 없이 바로 시작",0,["CNLW","CNSV"]],
+ ["culture","산악영화제·숲 축제 자원활동","울산울주세계산악영화제 같은 지역 축제에서 안내와 운영을 돕습니다.","해마다 자원활동 모집 공고 확인",0,["CPSW","FPSV","FPSW"]],
+ ["culture","마을 숲 이야기책 만들기","어르신 이야기와 사진을 모아 마을 숲 기록집을 펴냅니다.","글쓰기 모임으로 시작",0,["CPSV","FNLV","CPLV"]]
+];
+
+const T = {
+FPLW:{tree:"참나무",role:"숲 이야기꾼",line:"숲 이야기를 들려주는 일을 새 직업으로",
+ why:"도토리 하나로 다람쥐부터 어치까지 숲속 식구를 먹여 살리는 참나무. 어치가 숨겨 두고 잊은 도토리는 다시 새 숲이 됩니다. 내가 나눈 숲 이야기도 누군가의 마음에 심겨 또 다른 숲 사람을 키웁니다.",
+ who:"설명하고 가르치는 게 즐겁고, 자격을 따서 꾸준히 일하고 싶은 분",first:"백년숲 숲 산책 프로그램에서 해설 보조로 시작해 보세요."},
+FPLV:{tree:"느티나무",role:"정자나무 어른",line:"사람을 모아 숲길로 이끄는 동네 어른",
+ why:"전국 마을 정자나무 가운데 가장 많은 나무가 느티나무입니다. 넓게 펼친 가지 아래로 사람들이 절로 모여들고, 수백 년을 한자리에서 마을의 어른 노릇을 하지요. 이웃을 불러 모아 함께 숲길을 걷는 당신을 닮았습니다.",
+ who:"모임을 꾸리는 데 익숙하고, 수입보다 사람과 건강이 소중한 분",first:"울산숲 함께 걷기 모임의 반장을 맡아 주세요."},
+FPSW:{tree:"단풍나무",role:"숲동무",line:"현장 곁에서 배우며 숲 일자리로",
+ why:"소나무 다음으로 국민이 좋아하는 나무, 단풍나무. 봄엔 연두, 여름엔 초록, 가을엔 붉게 계절마다 새 빛깔로 물듭니다. 날개 달린 씨앗은 바람을 타고 새 자리로 날아가 뿌리를 내리지요. 인생 2막, 새 일터에서 배우며 나만의 빛깔로 물들어 가는 당신을 닮았습니다.",
+ who:"앞에 서기는 아직 부담이지만, 사람 곁에서 일하며 경력을 쌓고 싶은 분",first:"백년숲 숲체험 프로그램의 보조강사로 함께해 보세요."},
+FPSV:{tree:"버드나무",role:"그늘쉼터",line:"곁에서 조용히 챙기는 든든한 그늘",
+ why:"물가에 가지를 늘어뜨려 시원한 그늘을 내어 주는 버드나무. 바람에 휘어도 부러지지 않고, 껍질은 옛날부터 아픈 데를 달래는 약으로 쓰였습니다. 부드럽게 곁을 지키며 지친 사람을 살피는 당신을 닮았습니다.",
+ who:"나서기보다 챙기는 게 편하고, 보람과 관계를 찾는 분",first:"백년숲 행사 날 쉼터 담당을 맡아 주세요."},
+FNLW:{tree:"소나무",role:"숲가꿈 반장",line:"숲 작업 현장을 이끄는 기술자",
+ why:"오래도록 우리나라 사람이 가장 사랑해 온 나무, 소나무. 흙 한 줌 없는 바위 능선에서도 뿌리를 내리고 사철 푸르게 버팁니다. 거친 현장에서도 흔들림 없이 팀의 중심을 잡는 당신을 닮았습니다.",
+ who:"몸 쓰는 일에 자신 있고, 기술과 경험으로 팀을 이끌고 싶은 분",first:"백년숲 숲가꾸기 현장의 조장을 맡아 보세요."},
+FNLV:{tree:"밤나무",role:"산지기",line:"마을 뒷산을 오래 지켜 온 사람",
+ why:"밤은 싹을 틔운 뒤에도 씨밤 껍질이 오래도록 뿌리에 붙어 있어, 근본을 잊지 않는 나무라 하여 제사상에 오릅니다. 가시 돋친 송이로 열매를 단단히 지키기도 하지요. 마을 산의 내력과 옛 지혜를 지키고 다음 세대에 물려주는 당신을 닮았습니다.",
+ who:"산을 잘 알고, 그 경험을 이웃·후배와 나누고 싶은 분",first:"백년숲 기후재난 대응 마을 모임에 앞장서 주세요."},
+FNSW:{tree:"은행나무",role:"늦깎이 숲일꾼",line:"몸으로 배우는 새 일, 숲에서 시작",
+ why:"은행나무는 할아버지가 심으면 손자 대에 열매를 본다 하여 공손수(公孫樹)라 불립니다. 열매는 늦게 맺지만 병충해에 강하고 천 년을 넘게 살지요. 늦게 시작해도 땀을 차곡차곡 쌓아 오래가는 숲일꾼이 되는 당신을 닮았습니다.",
+ who:"체력은 자신 있고, 배워 가며 꾸준한 일자리를 얻고 싶은 분",first:"백년숲 나무심기·숲가꾸기 작업에 먼저 참여해 보세요."},
+FNSV:{tree:"전나무",role:"숲 지킴이",line:"말없이 꾸준히 숲을 지키는 손",
+ why:"오대산 월정사 숲길처럼 전나무는 곧은 줄기로 길 양옆에 줄지어 서서 사철 푸르게 숲을 지킵니다. 눈이 쌓여도 묵묵히 그 자리에 있지요. 말없이 꾸준히 숲 곁을 지키는 당신을 닮았습니다.",
+ who:"조용하고 꾸준한 일이 맞고, 건강과 보람을 함께 얻고 싶은 분",first:"울산숲 정기 돌봄 봉사에 함께해 주세요."},
+CPLW:{tree:"배롱나무",role:"숲 코디네이터",line:"숲 프로그램을 기획하고 운영하는 사람",
+ why:"배롱나무는 한 송이가 지면 다음 송이가 이어 피어 여름 내내 백 일 동안 꽃이 끊이지 않아 목백일홍이라 불립니다. 한 번의 행사로 끝내지 않고 프로그램을 계절 내내 이어 꾸려 가는 당신을 닮았습니다.",
+ who:"기획·관리 경험이 있고, 숲 분야에서 일로 이어 가고 싶은 분",first:"백년숲 프로그램 기획 회의에 함께해 주세요."},
+CPLV:{tree:"후박나무",role:"마을지기",line:"마을과 숲을 잇는 마당발",
+ why:"후박나무는 남쪽 바닷가 마을에서 당산나무로 모셔 온 상록수입니다. 사철 푸른 넓은 그늘로 마을 사람을 모으고, 두껍고 물기 많은 잎은 산불에도 강해 마을을 지켜 주지요. 마을을 지키고 사람을 하나로 묶어 내는 당신을 닮았습니다.",
+ who:"동네에 아는 사람이 많고, 공동체 일에 앞장서는 분",first:"백년숲 조합원이자 동네 연락책이 되어 주세요."},
+CPSW:{tree:"벚나무",role:"숲 안내데스크",line:"숲 시설에서 방문객을 맞는 얼굴",
+ why:"봄마다 꽃길을 열어 전국의 사람들을 불러 모으는 벚나무. 찾아온 이를 환한 얼굴로 맞이하는 데는 벚나무만 한 나무가 없습니다. 숲을 찾은 손님을 반갑게 맞고 길을 안내하는 당신을 닮았습니다.",
+ who:"응대·사무 경험이 있고, 숲 가까이에서 안정적으로 일하고 싶은 분",first:"백년숲 행사 접수·안내 데스크를 맡아 주세요."},
+CPSV:{tree:"매화나무",role:"안부 전령",line:"다정한 연락으로 사람을 이어 주는 사람",
+ why:"매화는 눈 속에서도 가장 먼저 꽃을 피워 봄이 왔다고 알려 줍니다. 그윽한 향은 멀리서도 먼저 닿지요. 오랜만인 이에게 먼저 안부를 건네고 반가운 소식을 전하는 당신을 닮았습니다.",
+ who:"전화·문자로 안부를 챙기는 게 자연스러운 분",first:"백년숲 참여자 안부 전화 봉사를 부탁드려요."},
+CNLW:{tree:"향나무",role:"나무 장인",line:"손기술로 나무를 다루는 전문가",
+ why:"향나무는 결이 곱고 단단하며 향이 오래 남아 예부터 깎고 다듬는 공예 재료로 귀하게 쓰였습니다. 다듬을수록 향이 깊어지지요. 손기술로 오래 남는 것을 만드는 당신을 닮았습니다.",
+ who:"손재주와 꼼꼼함이 있고, 기술로 일하고 싶은 분",first:"백년숲 목공 작업(산불피해목 소품 만들기)에 함께해 보세요."},
+CNLV:{tree:"감나무",role:"정원 지기",line:"마을 정원을 함께 가꾸는 사람",
+ why:"감나무는 집집마다 마당에 한 그루씩 심어 가꾸던 나무입니다. 가을이면 감을 따 이웃과 나누고, 꼭대기엔 까치밥을 남겨 새와도 나눴지요. 정성껏 가꾼 것을 이웃과 나누는 당신을 닮았습니다.",
+ who:"식물 기르기와 손작업을 좋아하고, 이웃과 함께하고 싶은 분",first:"울산 도심 숲정원 가꾸기에 앞장서 주세요."},
+CNSW:{tree:"이팝나무",role:"도시녹지관리원",line:"가로수와 도시숲을 돌보는 손",
+ why:"이팝나무는 초여름 가지마다 쌀밥 같은 흰 꽃을 소복이 얹어, 꽃이 풍성하면 풍년이 든다고 믿어 온 우리 나무입니다. 요즘은 도시 큰길 가로수로도 많이 심지요. 도시의 길가를 묵묵히 풍성하게 가꾸는 당신을 닮았습니다.",
+ who:"가까운 곳에서 몸을 쓰며 꾸준히 일하고 싶은 분",first:"울산숲 도시숲 돌봄 작업에 참여해 보세요."},
+CNSV:{tree:"동백나무",role:"손끝 살림꾼",line:"차분히 손으로 만들고 기르는 사람",
+ why:"동백은 모두 움츠린 한겨울에 조용히 붉은 꽃을 피웁니다. 씨앗으로는 동백기름을 짜 머릿기름과 등잔기름으로 살림에 보탰지요. 드러나지 않게 손끝으로 쓸모 있는 것을 만들어 내는 당신을 닮았습니다.",
+ who:"혼자 집중하는 손작업이 즐거운 분",first:"백년숲 공방 작업 봉사에 함께해 주세요."}
+};
+
+// 나무마다 잎·꽃·열매 그림 (64×64)
+const S = s => `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">${s}</svg>`;
+const R1 = n => +n.toFixed(1);
+const around = (cx,cy,r,n,off=-90) => Array.from({length:n},(_,i)=>{const d=off+i*360/n, a=d*Math.PI/180; return [R1(cx+r*Math.cos(a)),R1(cy+r*Math.sin(a)),d+90];});
+const LEAF = "M0 -20C9 -11 10 6 0 20C-10 6 -9 -11 0 -20Z";
+const chain = (x,y,dx,dy,n,r,col) => Array.from({length:n},(_,i)=>`<circle cx="${R1(x+dx*i)}" cy="${R1(y+dy*i)}" r="${R1(r*(1-i*.12))}" fill="${col}"/>`).join("");
+const flower = (cx,cy,r,col,mid) => around(cx,cy,r*.62,6).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${R1(r*.55)}" fill="${col}"/>`).join("")+`<circle cx="${cx}" cy="${cy}" r="${R1(r*.3)}" fill="${mid}"/>`;
+const ICONS = {
+ FPLW: S(`<g transform="rotate(-18 30 32)"><path d="M30 5c4 4 8 4 6 10 6 0 8 4 2 8 6 2 6 8 0 9 5 4 2 9-4 8 2 6-1 9-4 13-3-4-6-7-4-13-6 1-9-4-4-8-6-1-6-7 0-9-6-4-4-8 2-8-2-6 2-6 6-10z" fill="#6A9A47"/><path d="M30 9v46" stroke="#3E6B2A" stroke-width="1.6" fill="none"/></g><ellipse cx="50" cy="51" rx="6" ry="7.5" fill="#C08A4E"/><path d="M42.5 48c1-7 14-7 15 0z" fill="#6E4A2A"/><path d="M50 41v-3" stroke="#6E4A2A" stroke-width="2"/>`),
+ FPLV: S(`<g transform="translate(24 34) rotate(-28)"><path d="${LEAF}" fill="#79A552" stroke="#4E7A33" stroke-width="1.2" stroke-dasharray="2.5 1.5"/><path d="M0 -18V24" stroke="#4E7A33" stroke-width="1.4"/></g><g transform="translate(42 30) rotate(24)"><path d="${LEAF}" fill="#5E8C3F" stroke="#3E6B2A" stroke-width="1.2" stroke-dasharray="2.5 1.5"/><path d="M0 -18V24" stroke="#3E6B2A" stroke-width="1.4"/></g>`),
+ FPSW: S(`<path d="M32 42L33 61" stroke="#8A3A22" stroke-width="2.2"/><path d="M32 4L36 17L46 11L44 24L58 22L50 32L56 39L42 38L40 47L32 41L24 47L22 38L8 39L14 32L6 22L20 24L18 11L28 17Z" fill="#D9442B" stroke="#A92F1C" stroke-width="1.1" stroke-linejoin="round"/><path d="M32 42V8M32 40L10 24M32 40L54 24M32 40L18 14M32 40L46 14" stroke="#A92F1C" stroke-width="1"/>`),
+ FPSV: S(`<path d="M6 6Q28 2 44 20Q53 31 56 46" stroke="#7A5A3A" stroke-width="2" fill="none"/>` + [[15,17,8],[25,18,6],[34,24,3],[42,31,0],[49,40,-4],[55,52,-8]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="2.6" ry="11" transform="rotate(${r} ${x} ${y})" fill="#8CB85A"/>`).join("")),
+ FNLW: S(`<path d="M24 44L22 60" stroke="#6B4A2E" stroke-width="3"/>` + [[8,12],[13,8],[19,5],[26,5],[32,7],[38,11],[42,17]].map(([x,y])=>`<path d="M24 44L${x} ${y}" stroke="#3F6E3A" stroke-width="2.2" stroke-linecap="round"/>`).join("") + `<ellipse cx="47" cy="46" rx="8" ry="11" fill="#8A5A33"/><path d="M40 41Q47 45 54 41M39 47Q47 51 55 47M41 53Q47 56 53 53" stroke="#5E3B1E" stroke-width="1.4" fill="none"/>`),
+ FNLV: S(around(25,27,13,26).map(([x,y,d])=>`<path d="M25 27L${R1(25+18.5*Math.cos((d-90)*Math.PI/180))} ${R1(27+18.5*Math.sin((d-90)*Math.PI/180))}" stroke="#6E9A3A" stroke-width="1.4"/>`).join("") + `<circle cx="25" cy="27" r="13" fill="#8DB255"/><path d="M45 57C37 57 36 43 46 39C54 35 59 45 57 51C56 55 51 57 45 57Z" fill="#7A3F1E"/><path d="M39 53Q47 59 56 52" stroke="#D8B88A" stroke-width="3" fill="none"/><path d="M47 39l2-4" stroke="#7A3F1E" stroke-width="2"/>`),
+ FNSW: S(`<path d="M32 40L30 60" stroke="#9A7A2A" stroke-width="2.2"/><path d="M32 40C17 40 7 27 9 12Q19 5 29 12L32 21L35 12Q45 5 55 12C57 27 47 40 32 40Z" fill="#E8B931"/><path d="M32 40L15 16M32 40L23 11M32 40L41 11M32 40L49 16" stroke="#C9971C" stroke-width="1.1"/>`),
+ FNSV: S(`<path d="M32 4V60" stroke="#6B4A2E" stroke-width="2.2"/>` + Array.from({length:12},(_,i)=>{const y=8+i*4.4, l=R1(5+i*1.6); return `<path d="M32 ${R1(y)}l-${l} ${R1(l*.55)}M32 ${R1(y)}l${l} ${R1(l*.55)}" stroke="#2F6B4F" stroke-width="2" stroke-linecap="round"/>`;}).join("")),
+ CPLW: S(`<ellipse cx="18" cy="52" rx="5" ry="11" transform="rotate(-50 18 52)" fill="#6B9A4B"/><ellipse cx="46" cy="53" rx="5" ry="11" transform="rotate(50 46 53)" fill="#5E8C3F"/>` + flower(24,22,11,"#E2679F","#F6D35B") + flower(41,19,10,"#EE8DB8","#F6D35B") + flower(33,36,12,"#D9508F","#F6D35B") + flower(18,40,8,"#EE8DB8","#F6D35B") + flower(47,36,8,"#E2679F","#F6D35B")),
+ CPLV: S(`<path d="M32 62V32" stroke="#6B4A2E" stroke-width="2.4"/>` + [-72,-36,0,36,72].map(a=>`<g transform="rotate(${a} 32 32)"><ellipse cx="32" cy="16" rx="5.6" ry="15" fill="#2F6A3F"/><path d="M32 30V3" stroke="#6FA27A" stroke-width="1"/></g>`).join("") + `<path d="M32 36L23 47M32 36L41 47" stroke="#B83A2E" stroke-width="1.8"/><circle cx="23" cy="49" r="3.8" fill="#23263F"/><circle cx="41" cy="49" r="3.8" fill="#23263F"/><circle cx="22" cy="48" r="1" fill="#8C93C2"/><circle cx="40" cy="48" r="1" fill="#8C93C2"/>`),
+ CPSW: S(around(32,32,0,5).map(([,,d])=>`<path d="M32 32C24 23 25 11 29.5 9L32 13L34.5 9C39 11 40 23 32 32Z" transform="rotate(${d-90} 32 32)" fill="#F6B7C9" stroke="#E68AA7" stroke-width="1"/>`).join("") + around(32,32,6,10).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.1" fill="#C23A64"/>`).join("") + `<circle cx="32" cy="32" r="3.4" fill="#D9507A"/>`),
+ CPSV: S(`<path d="M2 58Q18 46 28 41Q46 33 62 18" stroke="#4A3526" stroke-width="3.2" fill="none"/>` + around(28,28,8.5,5).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7.4" fill="#FBE6EC" stroke="#E9A9BC" stroke-width="1"/>`).join("") + around(28,28,5.5,8).map(([x,y])=>`<path d="M28 28L${x} ${y}" stroke="#C79A2A" stroke-width=".8"/><circle cx="${x}" cy="${y}" r="1" fill="#E2B53A"/>`).join("") + `<circle cx="28" cy="28" r="2.6" fill="#E7C04A"/><circle cx="52" cy="23" r="4.2" fill="#F2B3C4"/>`),
+ CNLW: S(`<path d="M12 58Q26 34 52 8" stroke="#5B4632" stroke-width="2.2" fill="none"/>` + chain(18,48,-3,-3,4,3,"#4C7A55") + chain(24,40,4,1,4,2.9,"#5E8C63") + chain(32,30,-3,-4,4,3,"#4C7A55") + chain(40,22,4,1,4,2.9,"#5E8C63") + chain(48,12,-2,-3,3,2.9,"#4C7A55") + [[44,36],[50,30],[38,44]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.2" fill="#6F82B0"/><circle cx="${x-1}" cy="${y-1}" r="1" fill="#B9C4DE"/>`).join("")),
+ CNLV: S(`<g transform="translate(48 18) rotate(48) scale(.7)"><path d="${LEAF}" fill="#6F9A3E"/><path d="M0 -18V20" stroke="#4E7A2A" stroke-width="1.6"/></g><ellipse cx="30" cy="40" rx="18" ry="16" fill="#EB7A2A"/><ellipse cx="23" cy="34" rx="4.5" ry="3" fill="#F5A867"/>` + [[23,26,20],[37,26,-20],[27,22,-55],[33,22,55]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="5.5" ry="2.6" transform="rotate(${r} ${x} ${y})" fill="#4F7A2E"/>`).join("") + `<rect x="28.6" y="16" width="2.8" height="7" rx="1" fill="#5B4632"/>`),
+ CNSW: S(`<ellipse cx="18" cy="50" rx="5" ry="12" transform="rotate(-50 18 50)" fill="#6B9A4B"/><ellipse cx="46" cy="51" rx="5" ry="12" transform="rotate(50 46 51)" fill="#5E8C3F"/><path d="M32 58V40M32 40L20 26M32 40L44 24M32 40L32 18" stroke="#6B5A3A" stroke-width="1.4"/>` + [[20,24],[30,14],[44,20],[14,36],[50,34],[32,30],[24,40],[42,42]].map(([x,y])=>[0,45,90,135].map(d=>`<ellipse cx="${x}" cy="${y}" rx="1.6" ry="6" transform="rotate(${d} ${x} ${y})" fill="#FFFFFF" stroke="#B9C6B0" stroke-width=".6"/>`).join("")+`<circle cx="${x}" cy="${y}" r="1.2" fill="#C9B44A"/>`).join("")),
+ CNSV: S(`<ellipse cx="16" cy="50" rx="7" ry="14" transform="rotate(-55 16 50)" fill="#2F5D3A"/><ellipse cx="48" cy="50" rx="7" ry="14" transform="rotate(55 48 50)" fill="#3C7048"/>` + around(32,30,9,5).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10.5" fill="#C8263A" stroke="#A01C2E" stroke-width="1"/>`).join("") + `<circle cx="32" cy="30" r="6.5" fill="#F2C230"/>` + around(32,30,4,7).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1" fill="#C98A12"/>`).join(""))
+};
+
+const NA = "산림교육전문가 양성기관 (산림복지전문가 자격관리시스템에서 지역별 조회 · 예: 경북전문대)";
+const GOV = "울산시·구군, 남부지방산림청 국유림관리소 모집 공고";
+const WHERE = {
+ "숲해설가":NA, "유아숲지도사":NA, "숲길등산지도사":NA+" · 일자리는 "+GOV,
+ "산림레포츠지도사":"산림청 산림교육원 양성과정",
+ "목재교육전문가":"산림청 지정 목재교육 양성기관 (자격증 발급: 목재문화진흥회)",
+ "도시농업관리사":"울산시농업기술센터 도시농업 교육과정 + 한국산업인력공단 기능사 시험",
+ "명상숲코디네이터":"울산시·구군 모집 공고",
+ "숲체험 보조강사":"백년숲 현장 교육",
+ "숲 산책 모임 리더":"백년숲",
+ "숲해설 재능기부·세대 잇기":"백년숲 한독숲 이야기 해설단",
+ "나무심기·숲 행사 진행 봉사":"백년숲 · 울산시·구군 식목 행사",
+ "정원전문가":"산림청 지정 정원전문가 교육기관",
+ "시민정원사":"울산시 시민정원사 과정(태화강 국가정원) · 울산 남구 행복정원사 과정",
+ "수목원코디네이터":"수목원 운영기관·지자체 모집 공고",
+ "도시녹지관리원":"울산시·구군 공원녹지 부서 모집 공고",
+ "조경기능사 → 조경 현장":"한국산업인력공단 시험 · 직업훈련기관(국민내일배움카드)",
+ "국가유산 조경공":"한국산업인력공단 국가유산수리기능자 시험 · 국가유산청 수리기능인 양성과정",
+ "분재관리사 · 조경수조성관리사":"한국분재조합 · 한국조경수협회",
+ "공동체정원 모임장":"백년숲 · 동네 공동체정원",
+ "씨앗·모종 기르기와 나눔":"백년숲",
+ "목구조시공기술자":"목구조기술자 양성기관 (예: 한국목조건축직업전문학교)",
+ "국가유산수리기능자 (대목수)":"한국산업인력공단 시험 · 국가유산청 국가유산수리기능인 양성과정",
+ "목재등급평가사":"산림청 지정 목재등급평가사 양성기관",
+ "숲 시설물 보수":"백년숲 · 지자체 숲길 정비 사업",
+ "산불피해목·솎아 낸 나무 소품 공방":"백년숲 공방",
+ "가구·생활목공 수리와 되살림":"백년숲 공방 · 지역 목공방",
+ "목공 체험 진행 봉사":"백년숲 · 목재문화체험장",
+ "나무의사":"산림청 지정 나무의사 양성기관 (예: 경상국립대)",
+ "수목치료기술자":"산림청 지정 수목치료기술자 양성기관",
+ "마을 나무 가지치기·돌봄 봉사":"백년숲 안전교육",
+ "보호수·노거수 지킴이":"백년숲 · 울산시·구군 보호수 담당",
+ "산림기능사 → 작업반장":"한국산업인력공단 시험 · 산림조합 등 기능인 양성과정",
+ "산림경영기술자 (기능2급)":"산림청 지정 산림인력개발기관 (산림조합 임업기계훈련원 등)",
+ "숲생태관리인":GOV, "산불전문예방진화대":GOV, "산림병해충 예찰방제단":GOV,
+ "마을숲 돌봄 모임 대표":"백년숲", "마을 산불예방 순찰":"백년숲 · 울주군·산림조합", "현장 노하우 전수":"백년숲",
+ "나무심기·숲가꾸기 봉사":"백년숲 · 울산숲 돌봄",
+ "산림치유지도사 2급":"산림치유지도사 양성기관 (예: 경상국립대 임업기술교육정보센터)",
+ "산림휴양서비스매니저":"국립자연휴양림관리소·지자체 모집 공고",
+ "숲체험 동행 봉사":"백년숲", "행사 쉼터 지기":"백년숲", "산림복지 행사 자원봉사":"백년숲 · 한국산림복지진흥원 시설",
+ "산림복지전문업 운영":"한국산림복지진흥원 (등록·연수)",
+ "숲 사회적경제기업":"산림일자리발전소 그루매니저 · 한국임업진흥원",
+ "협동조합 조합원 활동":"백년숲사회적협동조합", "지역숲 공론장 참여":"백년숲",
+ "목재문화체험장 운영 보조":"목재문화체험장 운영 지자체 모집 공고", "숲 프로그램 행정 보조":"백년숲",
+ "참여자 안부 연락":"백년숲 안부숲", "감사 인사·소식 전하기":"백년숲", "행사 접수 봉사":"백년숲",
+ "생태 모니터링":"백년숲 · 울산숲", "숲 기록 정리":"백년숲", "마을 숲 이야기 채록":"백년숲 한독숲 이야기",
+ "임업인 (산약초·표고·밤 재배)":"산림조합 임업인 교육 · 한국임업진흥원",
+ "산촌 체험마을·숲 민박 운영":"산림일자리발전소 그루경영체 지원",
+ "임산물 가공·장터 판매":"한국임업진흥원 · 그루경영체 지원",
+ "숲 축제·문화행사 기획":"울산문화관광재단 등 지역 문화재단 교육·공모 · 백년숲",
+ "문화예술교육사":"한국문화예술교육진흥원 지정 교육기관·학점은행제 (신청·발급: 한국문화예술교육진흥원)",
+ "문화관광해설사":"울산시·구군 문화관광해설사 양성교육 모집 공고",
+ "태화강 국가정원 해설":"울산시 태화강 국가정원 해설사 전문교육",
+ "숲 그림(보태니컬 아트) 강사·작가":"지역 평생학습관·문화센터 강좌",
+ "숲 사진·영상 기록":"백년숲 · 지역 숲 콘텐츠 단체(예: 숲딜리버리협동조합)",
+ "숲 이야기 구연·인형극":"백년숲 · 평생학습관 구연동화 강좌",
+ "숲속 작은 음악회·낭독회":"백년숲 · 지역 생활문화 동아리",
+ "나무 업사이클 작품 전시":"백년숲 공방",
+ "산악영화제·숲 축제 자원활동":"울산울주세계산악영화제 등 지역 축제 자원활동 모집 공고",
+ "마을 숲 이야기책 만들기":"백년숲",
+ "숲길 걷기·등산 모임":"백년숲 · 동네 산악회",
+ "나무 이름 익히기 공부 모임":"백년숲 · 평생학습관 숲 생태 강좌"
+};
+
+// 백년숲에서 함께할 일: [이름, 설명, 어울리는 유형]
+const BAEK = [
+ ["숲BTI 진로 상담의 날","검사 결과를 들고 오시면 나무 유형별로 배울 곳과 모집 공고를 함께 찾아 드립니다.",["CPLW","FPSW","CPSW"]],
+ ["중장년 숲 입문 학교 (4주)","숲해설, 숲가꾸기 안전, 목공, 정원을 한 주씩 맛본 뒤 맞는 자격과정으로 이어 드립니다.",["FPLW","FPSW","FNSW","CNLW","CNLV"]],
+ ["내화수림 시민 조성단","마을과 임도 둘레에 굴참나무·동백·후박처럼 산불에 강한 나무를 심고, 봄철 전에 낙엽·덤불을 정리합니다.",["FNLW","FNSW","FNLV","FNSV","CPLV"]],
+ ["산불피해목 목공방","울주 산불피해목으로 시계·조명·키링을 만든 경험을 이어, 버려질 나무를 쓸모 있는 물건으로 되살립니다.",["CNLW","CNSV","CNLV"]],
+ ["울산숲·도시숲 돌봄단","울산숲과 기업이 함께 만든 도시숲을 정기적으로 물 주고 가꾸고 기록합니다.",["CNSW","FNSV","FPSV"]],
+ ["한독숲 이야기 해설단","한독산림협력 50년의 숲과 사람 이야기를 해설하고, 어르신들의 기억을 채록합니다.",["FPLW","FPLV","CPSV"]],
+ ["안부숲 마을 연락망","폭염·산불·호우 때 이웃 안부를 확인하고 대피 소식을 전하는 마을 연락망입니다.",["CPSV","CPLV","FPSV"]],
+ ["숲 그루경영체 키우기","함께 활동한 모임을 장작·공방·정원 돌봄 같은 주민 공동체 사업으로 키우도록 그루매니저와 연결합니다.",["CPLW","CPLV","FNLW"]],
+ ["숲속 작은 문화제","계절마다 숲에서 음악·낭독·그림·사진 전시를 여는 작은 문화제입니다. 기획부터 무대까지 참여자가 함께 꾸립니다.",["CPLW","FPLV","CNSV","CPSV"]]
+];
+
+// 그루경영체 선배 사례: [이름, 지역, 하는 일, 눈여겨볼 점]
+const SENIORS = {
+ "울산의 선배들": [
+  ["울산산촌임업희망단","울산","조선업에서 퇴직한 노동자들이 임업 장비를 배워 숲가꾸기를 합니다.","퇴직자가 새 기술로 숲 일을 연 사례"],
+  ["울산장작협동조합","울산","숲가꾸기 영림단과 주민이 솞아 낸 나무를 장작으로 만들어 팔아요.","버려지던 나무를 소득으로"],
+  ["배내골 숲사람들","울산 배내골","돌배 같은 자생 임산물을 살려 마을 소득을 만듭니다.","마을에 있던 것에서 시작"],
+  ["영남알프스숲길","울산·영남알프스","마을과 옛 숲길을 조사하고 복원합니다.","길과 이야기를 잇는 일"],
+  ["숲딜리버리협동조합","울산","숲 영상·숲문화 콘텐츠를 만듭니다. 2019년 그루경영체 지원 → 2020년 협동조합 → 2022년 12월 이달의 우수 그루경영체.","숲을 알리는 일도 숲 일"],
+  ["상북·두서 산주협업체","울주 상북·두서","한독산림협력으로 작은 산주들이 힘을 모아 약 4,800ha 숲을 함께 가꿨습니다. 전국 250여 곳으로 퍼진 모델입니다.","울주가 처음 보여 준 협업"]
+ ],
+ "전국의 선배들": [
+  ["상상공작소","경기 양평","청년부터 중장년까지 함께 목공 체험과 목공 제품 판매를 합니다. 2020년 그루경영체 → 협동조합, 2022년 7월 이달의 그루경영체.","중장년이 함께한 목공 공동체"],
+  ["㈜어반정글","서울","시민정원사를 길러내고 정원을 조성·관리합니다. 2019년 그루경영체 → 예비사회적기업 → 2022년 사회적기업 인증.","정원 일을 법인까지"],
+  ["숲깨비","대전 대덕구","경력단절여성들이 숲 인형극과 생태놀이로 어린이집·복지관을 찾아갑니다. 2022년 법인, 산림복지전문업 등록, 2023년 10월 이달의 그루경영체.","삶의 경험을 숲 교육으로"]
+ ]
+};
+
+// 소식 받기 신청 → 에어테이블 백년숲 운영 베이스 · 사람·관계 (자동화 웹훅)
+const SIGNUP_HOOK = "https://hooks.airtable.com/workflows/v1/genericWebhook/appkIe99GqYavB3E2/wflkqoLhJhDVXKwWL/wtrkG5zs5B5MA0yP4";
+const REGIONS = ["울산 중구","울산 남구","울산 동구","울산 북구","울산 울주군","울산 밖"];
+function signupForm(){
+  return `<form class="signup" id="signup" novalidate>
+    <div class="su-head"><h3 id="su-title">숲 소식 안내 받기</h3>
+      <p>교육·자격 과정, 숲 일자리 모집, 백년숲 활동 소식을 문자나 메일로 보내 드립니다.</p></div>
+    <label for="su-name">이름 <em>필수</em></label>
+    <input id="su-name" name="name" autocomplete="name" required>
+    <label for="su-phone">휴대폰 번호</label>
+    <input id="su-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678">
+    <label for="su-email">이메일</label>
+    <input id="su-email" name="email" type="email" autocomplete="email" placeholder="있으시면 적어 주세요">
+    <p class="hint">휴대폰 번호와 이메일 중 하나는 꼭 적어 주세요.</p>
+    <label for="su-region">사는 곳</label>
+    <select id="su-region" name="region"><option value="">고르기</option>${REGIONS.map(r=>`<option>${r}</option>`).join("")}</select>
+    <input id="su-website" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <details class="consent-box" open>
+      <summary>개인정보 수집·이용 안내</summary>
+      <dl>
+        <dt>수집하는 곧</dt><dd>백년숲사회적협동조합</dd>
+        <dt>목적</dt><dd>교육·자격 과정, 숲 일자리 모집, 백년숲 활동 소식(홍보성 안내 포함)을 문자·메일로 보내기</dd>
+        <dt>항목</dt><dd>이름, 휴대폰 번호, 이메일, 사는 곳, 숲BTI 검사 결과</dd>
+        <dt>보관 기간</dt><dd>동의를 거두어 가실 때까지, 또는 수집한 날부터 2년</dd>
+        <dt>동의 거부</dt><dd>동의하지 않아도 검사는 그대로 쓸 수 있습니다. 다만 소식을 보내 드릴 수 없습니다.</dd>
+        <dt>그만 받기</dt><dd>언제든 052-911-1002 또는 official@forest100.org로 알려 주시면 바로 지워 드립니다.</dd>
+      </dl>
+    </details>
+    <label class="agree" for="su-agree"><input id="su-agree" type="checkbox"> <span>위 내용을 읽고 개인정보 수집·이용과 소식 받기에 동의합니다. <em>필수</em></span></label>
+    <button class="primary" type="submit" id="su-send">소식 받기 신청</button>
+    <p class="su-msg" id="su-msg" role="status"></p>
+  </form>`;
+}
+let curRes = null;
+function placeNews(slotId){
+  const f = document.getElementById("signup"), slot = document.getElementById(slotId);
+  if (!f || !slot) return;
+  slot.appendChild(f);
+  const h = document.getElementById("su-title");
+  if (h) h.textContent = curRes ? `${curRes.t.tree}에게 맞는 소식 받기` : "숲 소식 안내 받기";
+}
+function bindSignup(){
+  const f = document.getElementById("signup"); if (!f) return;
+  const msg = document.getElementById("su-msg");
+  f.addEventListener("submit", async e => {
+    e.preventDefault();
+    const v = id => document.getElementById(id).value.trim();
+    const name = v("su-name"), phone = v("su-phone"), email = v("su-email"), region = v("su-region");
+    const digits = phone.replace(/\D/g, "");
+    msg.className = "su-msg err";
+    if (!name) { msg.textContent = "이름을 적어 주세요."; return; }
+    if (!digits && !email) { msg.textContent = "휴대폰 번호나 이메일 중 하나를 적어 주세요."; return; }
+    if (digits && (digits.length < 9 || digits.length > 11)) { msg.textContent = "휴대폰 번호를 다시 확인해 주세요. 예: 010-1234-5678"; return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = "이메일 주소를 다시 확인해 주세요."; return; }
+    if (!document.getElementById("su-agree").checked) { msg.textContent = "개인정보 수집·이용에 동의해 주셔야 소식을 보내 드릴 수 있습니다."; return; }
+    const code = curRes ? curRes.code : "", t = curRes ? curRes.t : {tree:"", role:""};
+    const today = new Date().toLocaleDateString("sv-SE", {timeZone:"Asia/Seoul"});
+    const channels = [digits ? "문자" : "", email ? "뉴스레터" : ""].filter(Boolean).join(", ");
+    const body = new URLSearchParams({
+      name, phone, email, region, website: v("su-website"),
+      tree: t.tree, role: t.role, treeType: code ? `${code} ${t.tree} · ${t.role}` : "검사 전 신청", channels, consent: "yes", consentDate: today,
+      consentPath: "숲BTI 검사 페이지 동의 체크",
+      memo: `숲BTI 중장년편에서 소식 받기 신청${region ? " · 사는 곳: " + region : ""}`
+    });
+    const btn = document.getElementById("su-send"); btn.disabled = true; btn.textContent = "보내는 중…";
+    try {
+      await fetch(SIGNUP_HOOK, {method:"POST", mode:"no-cors", body});
+      f.innerHTML = `<div class="su-done"><h3>신청했습니다</h3><p>${esc(name)}님, ${t.tree ? t.tree + "에게 맞는 " : ""}소식을 ${channels.replace("뉴스레터","메일")}로 보내 드리겠습니다. 그만 받고 싶으시면 052-911-1002로 알려 주세요.</p></div>`;
+    } catch(err) {
+      btn.disabled = false; btn.textContent = "소식 받기 신청";
+      msg.textContent = "지금 이 화면에서는 신청을 보낼 수 없습니다. 052-911-1002로 전화나 문자를 주시면 바로 넣어 드리겠습니다.";
+    }
+  });
+}
+
+const STAGE_OF = {
+ "숲길 걷기·등산 모임":"hobby","나무 이름 익히기 공부 모임":"hobby",
+ "숲 산책 모임 리더":"hobby","공동체정원 모임장":"hobby","씨앗·모종 기르기와 나눔":"hobby","산불피해목·솎아 낸 나무 소품 공방":"hobby",
+ "숲 그림(보태니컬 아트) 강사·작가":"hobby","숲 사진·영상 기록":"hobby","숲속 작은 음악회·낭독회":"hobby","나무 업사이클 작품 전시":"hobby","마을 숲 이야기책 만들기":"hobby",
+ "숲체험 보조강사":"volunteer","숲해설 재능기부·세대 잇기":"volunteer","나무심기·숲 행사 진행 봉사":"volunteer","시민정원사":"volunteer","숲 시설물 보수":"volunteer",
+ "가구·생활목공 수리와 되살림":"volunteer","목공 체험 진행 봉사":"volunteer","마을 나무 가지치기·돌봄 봉사":"volunteer","보호수·노거수 지킴이":"volunteer",
+ "마을숲 돌봄 모임 대표":"volunteer","마을 산불예방 순찰":"volunteer","현장 노하우 전수":"volunteer","나무심기·숲가꾸기 봉사":"volunteer","숲체험 동행 봉사":"volunteer",
+ "행사 쉼터 지기":"volunteer","산림복지 행사 자원봉사":"volunteer","협동조합 조합원 활동":"volunteer","지역숲 공론장 참여":"volunteer","참여자 안부 연락":"volunteer",
+ "감사 인사·소식 전하기":"volunteer","행사 접수 봉사":"volunteer","생태 모니터링":"volunteer","숲 기록 정리":"volunteer","마을 숲 이야기 채록":"volunteer",
+ "태화강 국가정원 해설":"volunteer","숲 이야기 구연·인형극":"volunteer","산악영화제·숲 축제 자원활동":"volunteer"
+};
+const STAGES = {
+ hobby:{name:"취미",step:"취미로 숲과 친해지기",desc:"자격 없이, 부담 없이 즐기며 숲과 사람을 알아 갑니다."},
+ volunteer:{name:"봉사",step:"봉사로 경험 쌓기",desc:"숲 일을 직접 해 보며 보람을 얻고 경력을 쌓습니다."},
+ job:{name:"일자리",step:"일자리로 잇기",desc:"자격과 경험을 갖춰 소득이 있는 일로 이어 갑니다."}
+};
+const stageOf = j => STAGE_OF[j[1]] || "job";
+
+const stage = document.getElementById("stage");
+let step = 0, answers = [], curField = "all", curStage = "all";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const jobsFor = code => JOBS.filter(j => j[5].includes(code));
+const jobLi = (j, showFits) => `<li>
+  <div class="tags"><span class="stg stg-${stageOf(j)}">${STAGES[stageOf(j)].name}</span><span class="field">${FIELDS[j[0]]}</span>${j[4] ? '<span class="gov">정부일자리</span>' : ""}</div>
+  <strong>${j[1]}</strong><p>${j[2]}</p><span class="prep">${j[3]}</span>
+  <span class="learn"><b>배우는 곳·모집처</b> ${WHERE[j[1]] || "담당 기관에 문의"}</span>
+  ${showFits ? `<div class="fits">${j[5].map(c => `<button data-c="${c}"><span class="ico sm">${ICONS[c]}</span>${T[c].tree} · ${T[c].role}</button>`).join("")}</div>` : ""}
+</li>`;
+
+function intro(){
+  placeNews("news-home");
+  stage.className = "card hero";
+  stage.style.removeProperty("--famc");
+  stage.innerHTML = `
+    <p class="eyebrow">백년숲 · 중장년 숲 활동 찾기</p>
+    <div class="hero-top">
+      <h1>나는 숲에서<br>어떤 나무일까?</h1>
+      <svg class="mascot" viewBox="0 0 120 150" role="img" aria-label="머리에 물음표가 있는 사람 모양 나무">
+        <ellipse cx="60" cy="140" rx="30" ry="5" fill="var(--line)"/>
+        <g class="m-body">
+          <path d="M53 104 Q36 106 28 94" stroke="var(--bark)" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <circle cx="27" cy="91" r="5" fill="var(--fp)"/>
+          <path d="M67 102 Q82 104 86 114" stroke="var(--bark)" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <rect x="50" y="84" width="20" height="46" rx="9" fill="var(--bark)"/>
+          <ellipse cx="51" cy="134" rx="9" ry="4.5" fill="var(--bark)"/>
+          <ellipse cx="69" cy="134" rx="9" ry="4.5" fill="var(--bark)"/>
+          <circle cx="36" cy="58" r="22" fill="var(--fp)"/>
+          <circle cx="84" cy="58" r="22" fill="var(--fp)"/>
+          <circle cx="60" cy="46" r="36" fill="var(--fp)"/>
+          <circle cx="48" cy="34" r="8" fill="var(--paper)" opacity=".18"/>
+          <text class="m-q" x="60" y="64" text-anchor="middle" fill="var(--paper)">?</text>
+        </g>
+      </svg>
+    </div>
+    <p class="lead">12문항, 3분이면 충분합니다. 열여섯 그루 가운데 나를 닮은 나무를 찾고, 숲에서 즐길 <strong>취미</strong>부터 <strong>봉사</strong>, <strong>일자리</strong>까지 나만의 숲길을 알려 드립니다.</p>
+    <div class="axes">
+      <div class="axis"><b>어디서</b><span>숲·산 ↔ 마을 가까이</span></div>
+      <div class="axis"><b>누구와</b><span>사람 ↔ 나무·손작업</span></div>
+      <div class="axis"><b>어떻게</b><span>이끌기 ↔ 받치기</span></div>
+      <div class="axis"><b>무엇을</b><span>일·소득 ↔ 보람·건강</span></div>
+    </div>
+    <button class="primary" id="start">검사 시작하기</button>`;
+  document.getElementById("start").onclick = () => { step = 0; answers = []; ask(); };
+  placeNews("news-home");
+}
+
+function ask(){
+  const it = Q[step];
+  placeNews("news-home");
+  stage.className = "card";
+  stage.innerHTML = `
+    <div class="progress"><span>${step+1} / ${Q.length}</span><div class="bar"><i style="width:${(step/Q.length)*100}%"></i></div></div>
+    <h2 class="q">${esc(it.q)}</h2>
+    <div class="choices">
+      <button class="choice" data-v="${it.a}"><span class="k">가</span><span>${esc(it.A)}</span></button>
+      <button class="choice" data-v="${it.b}"><span class="k">나</span><span>${esc(it.B)}</span></button>
+    </div>
+    <div class="row"><button class="ghost" id="back">${step===0 ? "처음으로" : "이전 문항"}</button></div>`;
+  stage.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+    answers[step] = b.dataset.v; step++;
+    step < Q.length ? ask() : result(score());
+  });
+  document.getElementById("back").onclick = () => { if (step === 0) intro(); else { step--; ask(); } };
+  stage.querySelector(".choice").focus({preventScroll:true});
+}
+
+function score(){
+  const n = {}; answers.forEach(v => n[v] = (n[v]||0) + 1);
+  return [["F","C"],["P","N"],["L","S"],["W","V"]].map(([a,b]) => (n[a]||0) >= (n[b]||0) ? a : b).join("");
+}
+
+function result(code, fromGallery){
+  const t = T[code], f = FAM[code.slice(0,2)], list = jobsFor(code);
+  placeNews("news-home");
+  stage.className = "card";
+  stage.style.setProperty("--famc", f.c);
+  stage.innerHTML = `
+    <div class="res-head">
+      <p class="eyebrow">${fromGallery ? "나무 살펴보기" : "나를 닮은 나무"}</p>
+      <span class="fam">${f.name} · ${f.desc}</span>
+      <div class="res-title"><span class="ico big">${ICONS[code]}</span><h2 class="res-tree">${t.tree}</h2></div>
+      <p class="res-role">${t.role} · ${t.line}</p>
+      <p class="treewhy">${t.why}</p>
+    </div>
+    <div class="code">${code.split("").map(c => `<div><b>${c}</b><small>${AX[c]}</small></div>`).join("")}</div>
+    <button type="button" class="jump" id="to-route"><span>${t.tree}의 취미·봉사·일자리 숲길과 배울 곳은 <b>아래에 자세히</b> 있어요</span><i aria-hidden="true">↓</i></button>
+    <div id="news-slot"></div>
+    <p class="below" aria-hidden="true">↓ 자세한 내용은 아래에 이어집니다</p>
+    <div class="sec"><h3>이런 분이에요</h3><p>${t.who}</p></div>
+    <div class="sec" id="route-sec"><h3>${t.tree}가 걸어갈 숲길</h3>
+      <p class="route-lead">취미로 숲과 친해지고, 봉사로 경험을 쌓고, 원하면 일자리로 이어 가세요. ${code.endsWith("W") ? "일·소득형이라 세 번째 단계가 목표입니다. 앞 단계는 가볍게 맛보고 넘어가셔도 됩니다." : "보람·건강형이라 취미와 봉사만으로도 충분합니다. 일자리는 원할 때 고르는 선택 단계입니다."}</p>
+      <ol class="route">${Object.entries(STAGES).map(([k,st],i) => { const js = list.filter(j => stageOf(j) === k); return `<li class="step"><div class="step-h"><span class="num">${i+1}</span><div><b>${st.step}</b><span>${st.desc}</span></div></div><ul class="jobs">${js.map(j => jobLi(j, false)).join("")}</ul></li>`; }).join("")}</ol>
+    </div>
+    <div class="first"><b>백년숲에서 첫걸음</b><span>${t.first}</span></div>
+    <div class="row">
+      <button class="primary" id="copy">결과 복사하기</button>
+      <button class="ghost" id="again">${fromGallery ? "내 나무 찾기" : "다시 하기"}</button>
+    </div>
+    <p class="toast" id="toast"></p>`;
+  document.getElementById("again").onclick = () => { step = 0; answers = []; ask(); };
+  curRes = {code, t}; placeNews("news-slot");
+  document.getElementById("to-route").onclick = () => document.getElementById("route-sec").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+  document.getElementById("copy").onclick = () => {
+    const txt = `[숲BTI 중장년편] 나를 닮은 나무는 「${t.tree}」 (${code} · ${t.role})\n${t.why}\n\n내가 걸어갈 숲길\n` +
+      Object.entries(STAGES).map(([k,st],i) => `${i+1}. ${st.step}\n` + list.filter(j => stageOf(j) === k).map(j => `· ${j[1]} (${j[3]}) — ${WHERE[j[1]] || "담당 기관 문의"}`).join("\n")).join("\n") + `\n\n백년숲에서 첫걸음: ${t.first}\n문의 052-911-1002`;
+    const toast = document.getElementById("toast");
+    const fallback = () => { toast.textContent = "복사가 안 되는 화면이에요. 결과 화면을 길게 눌러 직접 복사해 주세요."; };
+    try {
+      navigator.clipboard.writeText(txt).then(() => toast.textContent = "복사했습니다. 문자나 카톡에 붙여 넣어 보내세요.", fallback);
+    } catch(e){ fallback(); }
+  };
+  stage.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+}
+
+function gallery(){
+  const box = document.getElementById("families");
+  box.innerHTML = Object.entries(FAM).map(([k,f]) => `
+    <div class="family" style="--famc:${f.c}">
+      <h3>${f.name} <small>${f.desc}</small></h3>
+      <div class="grid">${Object.keys(T).filter(c => c.startsWith(k)).map(c => `
+        <button class="tile" data-c="${c}"><span class="ico">${ICONS[c]}</span><span class="tx"><code>${c}</code><b>${T[c].tree}</b><em>${T[c].role}</em><span class="ln">${T[c].line}</span></span></button>`).join("")}
+      </div>
+    </div>`).join("");
+  box.querySelectorAll(".tile").forEach(b => b.onclick = () => result(b.dataset.c, true));
+}
+
+function catalog(){
+  const chips = document.getElementById("fieldChips");
+  const all = [["all","전체",JOBS.length], ...Object.entries(FIELDS).map(([k,v]) => [k,v,JOBS.filter(j => j[0]===k).length])];
+  chips.innerHTML = all.map(([k,v,n]) => `<button class="chip" data-f="${k}" aria-pressed="${k===curField}">${v}<small>${n}</small></button>`).join("");
+  chips.querySelectorAll(".chip").forEach(b => b.onclick = () => { curField = b.dataset.f; catalog(); });
+  const sc = document.getElementById("stageChips");
+  sc.innerHTML = [["all","모든 단계"], ...Object.entries(STAGES).map(([k,v]) => [k, v.name])].map(([k,v]) => `<button class="chip stage-chip" data-s="${k}" aria-pressed="${k===curStage}">${v}<small>${k==="all" ? JOBS.length : JOBS.filter(j => stageOf(j)===k).length}</small></button>`).join("");
+  sc.querySelectorAll(".chip").forEach(b => b.onclick = () => { curStage = b.dataset.s; catalog(); });
+  const list = JOBS.filter(j => (curField === "all" || j[0] === curField) && (curStage === "all" || stageOf(j) === curStage));
+  const box = document.getElementById("catalog");
+  box.innerHTML = `<ul class="jobs">${list.map(j => jobLi(j, true)).join("")}</ul>`;
+  box.querySelectorAll(".fits button").forEach(b => b.onclick = () => result(b.dataset.c, true));
+}
+
+function extras(){
+  const fitBtns = codes => `<div class="fits">${codes.map(c => `<button data-c="${c}"><span class="ico sm">${ICONS[c]}</span>${T[c].tree}</button>`).join("")}</div>`;
+  const b = document.getElementById("baek");
+  b.innerHTML = BAEK.map(([n,d,cs]) => `<div class="case"><h3>${n}</h3><p>${d}</p>${fitBtns(cs)}</div>`).join("");
+  const s = document.getElementById("seniors");
+  s.innerHTML = Object.entries(SENIORS).map(([g,list]) => `<p class="groupname">${g}</p><div class="cards">${list.map(([n,p,d,m]) => `<div class="case"><span class="place">${p}</span><h3>${n}</h3><p>${d}</p><span class="mark">${m}</span></div>`).join("")}</div>`).join("");
+  b.querySelectorAll(".fits button").forEach(x => x.onclick = () => result(x.dataset.c, true));
+}
+
+document.getElementById("news-home").innerHTML = signupForm();
+bindSignup();
+document.getElementById("banner").onclick = () => {
+  const f = document.getElementById("signup");
+  f.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+  setTimeout(() => document.getElementById("su-name").focus({preventScroll:true}), 400);
+};
+gallery();
+catalog();
+extras();
+intro();
+</script>
+
+</body>
+</html>
