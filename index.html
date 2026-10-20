@@ -793,5 +793,18 @@ extras();
 intro();
 </script>
 
+<script>
+// 홈페이지(크리에이터링크)에 끼워 넣었을 때 높이를 알려 줘서 틀 크기가 내용에 맞게 늘어나게 함
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function send(){ var h = document.documentElement.scrollHeight; if (h !== last) { last = h; window.parent.postMessage({forestBtiHeight: h}, "*"); } }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  document.addEventListener("click", function(){ setTimeout(send, 350); });
+  setInterval(send, 1500);
+})();
+</script>
 </body>
 </html>
