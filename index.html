@@ -156,6 +156,15 @@ button:focus-visible{outline:3px solid var(--bark);outline-offset:3px}
 .stg-hobby{background:var(--pine-soft);color:var(--pine)}
 .stg-volunteer{background:var(--bark-soft);color:var(--bark)}
 .stg-job{background:var(--ink);color:var(--paper)}
+.class-card{border-radius:16px;padding:20px 18px;background:var(--bark-soft);border:2px solid var(--bark);display:flex;flex-direction:column;gap:8px}
+.class-tag{align-self:flex-start;font-size:13px;font-weight:700;background:var(--bark);color:var(--paper);border-radius:999px;padding:3px 12px}
+.class-card h3{font-size:22px}
+.class-card p{font-size:16px;color:var(--ink)}
+.class-facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:16px}
+.class-facts b{color:var(--bark);margin-right:8px}
+.class-btn{align-self:stretch;text-align:center;text-decoration:none;background:var(--bark);color:var(--paper);border-radius:12px;padding:15px 18px;font-size:19px;font-weight:700;margin-top:4px}
+.class-btn:hover{filter:brightness(1.08)}
+.class-btn:focus-visible{outline:3px solid var(--pine);outline-offset:3px}
 .first{background:var(--pine-soft);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
 .first b{font-size:15px;color:var(--pine)}
 .toast{font-size:15px;color:var(--pine);min-height:1.4em}
@@ -288,6 +297,7 @@ const JOBS = [
  ["edu","목재교육전문가","목재문화체험장·공방에서 나무와 목공을 가르칩니다.","산림청 지정 양성기관 과정 이수",0,["CNLW","CPLW"]],
  ["edu","도시농업관리사","텃밭·도시농업 강사로 학교, 복지시설, 주말농장에서 가르칩니다.","전문과정 80시간 + 원예·조경 등 기능사 1종 이상",0,["CNLV","CPLW"]],
  ["edu","명상숲코디네이터","학교 명상숲을 가꾸고 학생 숲 활동을 운영합니다.","산림·조경·식물 자격 또는 관련 경력 2년",1,["CPLW","CNLV"]],
+ ["edu","도시숲 생태관리교사 과정","연암정원·호계역 숲을 알고 가꾸고, 청소년에게 숲정원 모니터링을 가르칩니다.","백년숲학교 5회 과정 (무료)",0,["CPLW","CPLV","CNLV","FPLV","FPSW","CPSW"]],
  ["edu","숲체험 보조강사","숲해설가·유아숲지도사 곁에서 프로그램 진행을 돕습니다.","현장 교육 후 참여",0,["FPSW","FPSV","FPLW"]],
  ["edu","숲 산책 모임 리더","이웃과 정기적으로 숲길을 걷는 모임을 꾸립니다.","자격 없이 바로 시작",0,["FPLV","FPLW","FPSW","FPSV"]],
  ["edu","숲해설 재능기부·세대 잇기","살아온 경험과 동네 이야기를 아이·청년과 숲길에서 나눕니다.","자격 없이 바로 시작",0,["FPLV","FPLW"]],
@@ -450,6 +460,7 @@ const WHERE = {
  "목재교육전문가":"산림청 지정 목재교육 양성기관 (자격증 발급: 목재문화진흥회)",
  "도시농업관리사":"울산시농업기술센터 도시농업 교육과정 + 한국산업인력공단 기능사 시험",
  "명상숲코디네이터":"울산시·구군 모집 공고",
+ "도시숲 생태관리교사 과정":"백년숲학교 (결과 화면의 수업 신청하기)",
  "숲체험 보조강사":"백년숲 현장 교육",
  "숲 산책 모임 리더":"백년숲",
  "숲해설 재능기부·세대 잇기":"백년숲 한독숲 이야기 해설단",
@@ -509,7 +520,7 @@ const WHERE = {
 // 백년숲에서 함께할 일: [이름, 설명, 어울리는 유형]
 const BAEK = [
  ["숲BTI 진로 상담의 날","검사 결과를 들고 오시면 나무 유형별로 배울 곳과 모집 공고를 함께 찾아 드립니다.",["CPLW","FPSW","CPSW"]],
- ["중장년 숲 입문 학교 (4주)","숲해설, 숲가꾸기 안전, 목공, 정원을 한 주씩 맛본 뒤 맞는 자격과정으로 이어 드립니다.",["FPLW","FPSW","FNSW","CNLW","CNLV"]],
+ ["중장년 숲 입문 학교 (4주)","숲해설, 숲가꾸기 안전, 목공, 정원을 한 주씩 맛본 뒤 맞는 자격과정으로 이어 드립니다. 열리면 소식 받기를 신청하신 분께 먼저 알려 드려요.",["FPLW","FPSW","FNSW","CNLW","CNLV"]],
  ["내화수림 시민 조성단","마을과 임도 둘레에 굴참나무·동백·후박처럼 산불에 강한 나무를 심고, 봄철 전에 낙엽·덤불을 정리합니다.",["FNLW","FNSW","FNLV","FNSV","CPLV"]],
  ["산불피해목 목공방","울주 산불피해목으로 시계·조명·키링을 만든 경험을 이어, 버려질 나무를 쓸모 있는 물건으로 되살립니다.",["CNLW","CNSV","CNLV"]],
  ["울산숲·도시숲 돌봄단","울산숲과 기업이 함께 만든 도시숲을 정기적으로 물 주고 가꾸고 기록합니다.",["CNSW","FNSV","FPSV"]],
@@ -569,6 +580,14 @@ function signupForm(){
     <p class="su-msg" id="su-msg" role="status"></p>
   </form>`;
 }
+// 지금 모집 중인 수업 (마감일이 지나면 결과 화면에서 자동으로 사라짐)
+const CLASS_OPEN = {until:"2026-11-01", url:"https://docs.google.com/forms/d/e/1FAIpQLSfC1vduwiM17_OaXt-W9DzDdY032wqErOfCsRI0nschltCTvQ/viewform", noteEntry:"entry.1021716677"};
+function classCard(code, t){
+  const today = new Date().toLocaleDateString("sv-SE", {timeZone:"Asia/Seoul"});
+  if (today > CLASS_OPEN.until) return "";
+  const href = CLASS_OPEN.url + "?usp=pp_url&" + CLASS_OPEN.noteEntry + "=" + encodeURIComponent(`숲BTI 결과: ${t.tree} (${code} · ${t.role})`);
+  return `<div class="class-card"><span class="class-tag">지금 모집 중 · 무료 · 30명</span><h3>백년숲학교 도시숲 생태관리교사 과정</h3><p>연암정원과 호계역 숲을 알고, 가꾸고, 가르치는 시민이 되어 보세요. 퇴직 이후 할 일을 찾는 분, 숲 활동을 처음 시작하는 분도 환영합니다.</p><ul class="class-facts"><li><b>일정</b> 11월 1일(일)·2일(월)·4일(수)·6일(금)·8일(일), 오후 2~5시 (5회)</li><li><b>장소</b> 연암정원과 인근 실내 공간</li></ul><a class="class-btn" href="${href}" target="_blank" rel="noopener">수업 신청하기 →</a></div>`;
+}
 let curRes = null;
 function placeNews(slotId){
   const f = document.getElementById("signup"), slot = document.getElementById(slotId);
@@ -612,6 +631,7 @@ function bindSignup(){
 }
 
 const STAGE_OF = {
+ "도시숲 생태관리교사 과정":"volunteer",
  "숲길 걷기·등산 모임":"hobby","나무 이름 익히기 공부 모임":"hobby",
  "숲 산책 모임 리더":"hobby","공동체정원 모임장":"hobby","씨앗·모종 기르기와 나눔":"hobby","산불피해목·솎아 낸 나무 소품 공방":"hobby",
  "숲 그림(보태니컬 아트) 강사·작가":"hobby","숲 사진·영상 기록":"hobby","숲속 작은 음악회·낭독회":"hobby","나무 업사이클 작품 전시":"hobby","마을 숲 이야기책 만들기":"hobby",
@@ -718,6 +738,7 @@ function result(code, fromGallery){
     <div class="code">${code.split("").map(c => `<div><b>${c}</b><small>${AX[c]}</small></div>`).join("")}</div>
     <button type="button" class="jump" id="to-route"><span>${t.tree}의 취미·봉사·일자리 숲길과 배울 곳은 <b>아래에 자세히</b> 있어요</span><i aria-hidden="true">↓</i></button>
     <div id="news-slot"></div>
+    ${classCard(code, t)}
     <p class="below" aria-hidden="true">↓ 자세한 내용은 아래에 이어집니다</p>
     <div class="sec"><h3>이런 분이에요</h3><p>${t.who}</p></div>
     <div class="sec" id="route-sec"><h3>${t.tree}가 걸어갈 숲길</h3>
